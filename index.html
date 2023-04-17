@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-itunes-app" content="app-id=310633997, app-argument=123456">
+	<title>Woosmap Demo</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.5;
+			background-color: #f2f2f2;
+		}
+		
+		header {
+			background-color: #3F5FF5;
+			color: #fff;
+			padding: 10px;
+			text-align: center;
+		}
+		
+		main {
+			padding: 10px;
+			box-sizing: border-box;
+			max-width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			min-height: calc(100vh - 80px);
+		}
+		
+		section {
+			background-color: #fff;
+			padding: 20px;
+			margin: 10px;
+			box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+			min-width: 300px;
+			max-width: 400px;
+		}
+		
+		h1 {
+			font-size: 24px;
+			margin-top: 0;
+		}
+		
+		p {
+			margin-bottom: 0;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Woosmap Demo</h1>
+	</header>
+	
+	<main>
+        <section id="loaderSectionAndroid" style="display:none;">
+            <h1>Check in progress</h1>
+			<p>Please wait while we perform compatibility check.</p>
+		</section>
+		 <section id="loaderSectioniOS" style="display:none;">
+            <h1>Connect to App Store</h1>
+			<p>Please download app from store, and revisit same URL</p>
+			<p><a href='https://testflight.apple.com/join/QW2yWVe5'>Download</a></p>
+		</section>
+		<section id="notSupportedSection" style="display:none;">
+			<h1>Not Supported</h1>
+			<p>Please open this link on your iPhone or Android phone</p>
+		</section>
+
+        <section id="invalidKeySection" style="display:none;">
+			<h1>Invalid Key</h1>
+			<p>Key parameter is missing from your URL</p>
+		</section>
+	</main>
+    <script>
+        function redirectAndroid(key){
+            setTimeout(function () { window.location = "https://play.google.com/store/apps/details?id=com.whatsapp"; }, 1000);
+            window.location = "woos://demo.woosmap.com?key=" + key;
+        }
+
+        function redirectiOS(key){
+            window.location = "woos://demo.woosmap.com?key=" + key;
+
+			var headNode = document.getElementsByTagName("head")[0];
+			var sbNode = document.createElement('meta');
+			sbNode.name = 'apple-itunes-app';
+			sbNode.content = 'app-id=6447337527';
+			headNode.appendChild(sbNode);
+        }
+
+        function doRedirect(){
+            var browserOS = getMobileOperatingSystem();
+            var key = getQueryStringValue();
+            if (key == null){
+                document.getElementById("invalidKeySection").style.display = "block";
+                return;
+            }
+            if (browserOS == "Android"){
+				document.getElementById("loaderSectionAndroid").style.display = "block";
+                redirectAndroid(key);
+                return;
+            }
+            if (browserOS == "iOS"){
+				document.getElementById("loaderSectioniOS").style.display = "block";
+                redirectiOS(key);
+                return;
+            }
+            document.getElementById("notSupportedSection").style.display = "block";
+            return;
+        }
+
+        function getMobileOperatingSystem() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Windows Phone must come first because its UA also contains "Android"
+            if (/windows phone/i.test(userAgent)) {
+                return "Windows Phone";
+            }
+   
+            if (/android/i.test(userAgent)) {
+                return "Android";
+            }
+
+            // iOS detection from: http://stackoverflow.com/a/9039885/177710
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+            }
+
+            return "unknown";
+        }
+
+        function getQueryStringValue(){
+            const currentURL = window.location.href;
+            const url = new URL(currentURL);
+            const searchParams = url.searchParams;
+            return searchParams.get('key');
+        }
+        doRedirect();
+    </script>
+</body>
+</html>
