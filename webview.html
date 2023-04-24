@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+    <html>
+      <head>
+        <title>Woosmap</title>
+        <meta charset="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, 
+maximum-scale=1.0"
+        />
+        <style>
+        
+#app,#map,body,html{height:100%}body,html{margin:0;padding:0}body{-webkit-user-select:none;-ms-user-select:none;user-select:none;background-repeat:no-repeat;background-attachment:fixed;background-size:25%;background-position:center;}
+        </style>
+      </head>
+
+      <body>
+        <div id="app">
+          <div id="map" style="visibility: hidden;"></div>
+        </div>
+      </body>
+      <script defer 
+src="https://sdk.woosmap.com/map/map.js?libraries=widgets&key=woos-2a586ec3-eb2e-3f70-b6ec-2b7783f633cc&callback=initMap"></script>
+      <script>
+        var WoosmapIndoorImpl = function (){
+          var mapIsLoaded = false;
+          var indoorWidget = null;
+          var indoorService = null;
+          var map = null;
+          var storesOverlay = {};
+          var markers = {};
+          function formatMessage(event,data,key = null){
+            let msgData= {"event":event, "data":data, "key":key}
+            return msgData
+          }
+
+          return {
+            formatMessage: formatMessage,
+            initMap: function(){
+              window.webkit = {};
+              window.webkit.messageHandlers = {};
+              window.webkit.messageHandlers.nativeWebView = null;
+              document.querySelector("#map").style.visibility = "none";
+              this.mapConfiguration.gestureHandling = "greedy";
+
+              let worldMapConfig = this.mapConfiguration;
+              this.map = new 
+window.woosmap.map.Map(document.getElementById("map"), worldMapConfig);
+              if(this.activateIndoor) {
+                this.mapIsLoaded = false;
+                const queryParams = new 
+URLSearchParams(window.location.search);
+                if (queryParams.get("venue") != null) {
+                  this.indoorRendererConfiguration.venue = 
+queryParams.get("venue");
+                }
+                else{
+                  document.querySelector("#map").style.visibility = 
+"visible";
+                }
+                
+                this.indoorWidget = new 
+window.woosmap.map.IndoorWidget(this.indoorWidgetConfiguration,this.indoorRendererConfiguration);
+                this.indoorWidget.setMap(this.map);
+                this.indoorService = new 
+window.woosmap.map.IndoorService();
+
+                let venueLoadedListener = this.indoorWidget.addListener(
+                  "indoor_venue_loaded",
+                  (venue) => {
+                    mapIsLoaded = true;
+                    document.querySelector("#map").style.visibility = 
+"visible";
+                    if(window.webkit.messageHandlers.nativeWebView){
+                      
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("indoor_venue_loaded",venue)));
+                    }
+                  }
+                );
+
+                let indoorlevelchanged = this.indoorWidget.addListener(
+                  "indoor_level_changed",
+                  (level) => {
+                    if(window.webkit.messageHandlers.nativeWebView){
+                      
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("indoor_level_changed",level)));
+                    }
+                  }
+                );
+
+                let indoorfeatureselected = this.indoorWidget.addListener(
+                  "indoor_feature_selected",
+                  (feature) => {
+                    if(window.webkit.messageHandlers.nativeWebView){
+                      
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("indoor_feature_selected",feature)));
+                    }
+                  }
+                );
+
+                let indooruserlocation = this.indoorWidget.addListener(
+                  "indoor_user_location",
+                  (newlocation) => {
+                    if(window.webkit.messageHandlers.nativeWebView){
+                      
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("indoor_user_location",newlocation)));
+                    }
+                  }
+                );
+              }
+              else{
+                document.querySelector("#map").style.visibility = 
+"visible";
+              }
+              this.map.addListener("bounds_changed", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                  
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("bounds_changed",e)));
+                }
+              });
+              this.map.addListener("center_changed", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("center_changed",e)));
+                }
+              });
+              this.map.addListener("click", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                  
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("click",e)));
+                }
+                
+//woosmap.indoorWidget.setUserLocation(e.latlng.lat,e.latlng.lng,0,30,false);
+              });
+              this.map.addListener("dblclick", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("dblclick",e)));
+                }
+              });
+              this.map.addListener("drag", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("drag",e)));
+                }
+              });
+              this.map.addListener("dragend", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("dragend",e)));
+                }
+              });
+              this.map.addListener("dragstart", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("dragstart",e)));
+                }
+              });
+              this.map.addListener("idle", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("idle",e)));
+                }
+              });
+              this.map.addListener("mousemove", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("mousemove",e)));
+                }
+              });
+              this.map.addListener("mouseout", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("mouseout",e)));
+                }
+              });
+              this.map.addListener("mouseover", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("mouseover",e)));
+                }
+              });
+              this.map.addListener("rightclick", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("rightclick",e)));
+                }
+              });
+              this.map.addListener("zoom_changed", (e) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("zoom_changed",e)));
+                }
+              });
+              window.woosmap.map.event.addListener(this.map, 
+"store_selected", (store) => {
+                if (window.webkit.messageHandlers.nativeWebView) {
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("store_selected", 
+store)));
+                }
+              });
+              window.woosmap.map.event.addListener(this.map, 
+"store_unselected", (store) => {
+                if (window.webkit.messageHandlers.nativeWebView) {
+                    
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("store_unselected", 
+store)));
+                }
+              });
+              if(window.webkit.messageHandlers.nativeWebView){
+                
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("plugin_loaded",null)));
+              }
+              
+            },
+            directions: function(parameters,ref){
+              let temporigin =parameters.origin;
+              let start = new 
+window.woosmap.map.LatLng(temporigin.lat,temporigin.lng);
+              let tempdestination =parameters.destination;
+              let destination = new 
+window.woosmap.map.LatLng(tempdestination.lat,tempdestination.lng);
+              parameters.origin = start;
+              parameters.destination = destination;
+              this.indoorService.directions(parameters,(result) => {
+                if(window.webkit.messageHandlers.nativeWebView){
+                  
+window.webkit.messageHandlers.nativeWebView.postMessage(JSON.stringify(formatMessage("fn",result,ref)));
+                }
+              });
+            },
+            map: map,
+            storesOverlay: storesOverlay,
+            markers: markers,
+            indoorWidget:indoorWidget,
+            indoorService:indoorService,
+            activateIndoor:false,
+            mapConfiguration: {
+                center: { lat: 48.844437932920535, lng: 2.3743880269761393 
+},
+                zoom: 6,
+                gestureHandling:"greedy",
+                lng:"fr",
+              },
+            indoorRendererConfiguration:{
+              centerMap: true,
+              defaultFloor: 0
+            },
+            indoorWidgetConfiguration:{
+              ui: {
+                  primaryColor: "#3D5AFE",
+                  secondaryColor: "#F41F57",
+                  tertiaryColor: "#FFAB39"
+                }, // Define primary/secondary/tertiary colors
+              units: "metric" // Define the distance unit for route distance calculation
+            },
+            getCenter:function() {
+                return JSON.stringify(this.map.getCenter());
+            },
+            getBounds:function(padding) {
+                return JSON.stringify(this.map.getBounds(padding));
+            },
+            fitBounds:function(bounds,padding) {
+                this.map.fitBounds(bounds,padding);
+            },
+            getBounds:function(padding) {
+                return JSON.stringify(this.map.getBounds(padding));
+            },
+            getHeading:function() {
+                return this.map.getHeading();
+            },
+            getTilt:function() {
+                return this.map.getTilt();
+            },
+            getZoom:function() {
+                return this.map.getZoom();
+            },
+            panBy:function(x,y) {
+                this.map.panBy(x,y);
+            },
+            panTo:function(latlng,padding) {
+                this.map.panTo(latlng,padding);
+            },
+            panToBounds:function(bound,padding) {
+                this.map.panToBounds(bound,padding);
+            },
+            setCenter:function(latlng,padding) {
+                this.map.setCenter(latlng,padding);
+            },
+            setHeading:function(heading) {
+                this.map.setHeading(heading);
+            },
+            setTilt:function(tilt) {
+                this.map.setTilt(tilt);
+            },
+            setZoom:function(zoom) {
+                this.map.setZoom(zoom);
+            },
+          };
+        };
+      const woosmap = WoosmapIndoorImpl();
+     
+      function initMap(){
+        //indoor map Configuration
+        //indoor map rendererConfiguration
+        woosmap.activateIndoor = true;
+        woosmap.initMap();
+      }
+      //window.initMap =  initMap;
+      </script>
+    </html>
