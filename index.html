@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--meta name="apple-itunes-app" content="app-id=310633997, app-argument=123456" -->
+	<!--meta name="apple-itunes-app" content="app-id=6448101409, app-argument=123456" -->
 	<title>Woosmap Demo</title>
 	<style>
 		body {
@@ -84,12 +84,12 @@
         }
 
         function redirectiOS(key){
-            window.location = "woos://demo.woosmap.com?key=" + key;
+            window.location = "woos://woosmap.com?key=" + key;
 
 			var headNode = document.getElementsByTagName("head")[0];
 			var sbNode = document.createElement('meta');
 			sbNode.name = 'apple-itunes-app';
-			sbNode.content = 'app-id=6447337527';
+			sbNode.content = 'app-id=6448101409 , app-argument=woos://woosmap.com?key='+ key +';
 			headNode.appendChild(sbNode);
         }
 
