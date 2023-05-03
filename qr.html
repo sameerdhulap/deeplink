@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Woosmap Link generator</title>
+</head>
+<body>
+<Form>
+<input name='publickey' type=text placeholder="public key"/><br/>
+<input name='naokey' type=text placeholder="NAO key"/><br/><br/>
+<input type=button value= "Generate QR" onclick="generate()" />
+</Form>
+<p class=result>- No result -</p>
+<p class=qrcode></p>
+<hr/>
+<p><h3>Email Format</h3>
+   <p>
+    Dear [name],<br/><br/>
+Thank you for your interest in Woosmap. If you haven't already, you can download the app by clicking on the following links:<br/>
+- For Android users: https://play.google.com/store/apps/details?id=com.woosmap.woosmap<br/>
+- For iOS users: https://apps.apple.com/fr/app/woosmap/id6448101409?itsct=apps_box_link&itscg=30200<br/>
+<br/>
+To start using the app, simply download and open it. Then, choose the "Scan QR Code" option and scan the code provided. This will quickly configure the app for you.
+<br/><br/>
+Please let me know if you have any questions or need further assistance.
+<br/><br/>
+Best regards,<br/>
+Woosmap
+   </p>
+</p>
+<script>
+function generate(){
+var pkey = document.querySelector('input[name="publickey"]');
+var naokey = document.querySelector('input[name="naokey"]');
+const jsonstruct = {woosmap_key:pkey.value,polestar_key:naokey.value};
+var key = "woos://woosmap.com?key="+ btoa(JSON.stringify(jsonstruct));
+
+document.querySelector('.result').innerText = key
+document.querySelector('.qrcode').innerHTML = '<img src="https://qrickit.com/api/qr.php?d='+key+'&addtext=woosmap&txtcolor=442EFF&fgdcolor=000000&bgdcolor=FFFFFF&qrsize=300&t=p&e=m"/>'
+}
+</script>
+
+</body>
+</html>
