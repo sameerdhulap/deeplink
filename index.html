@@ -84,13 +84,12 @@
         }
 
         function redirectiOS(key){
-            window.location = "woos://woosmap.com?key=" + key;
-
-			var headNode = document.getElementsByTagName("head")[0];
-			var sbNode = document.createElement('meta');
-			sbNode.name = 'apple-itunes-app';
-			sbNode.content = 'app-id=6448101409, app-argument=woos://woosmap.com?key='+ key;
-			headNode.appendChild(sbNode);
+		var headNode = document.getElementsByTagName("head")[0];
+		var sbNode = document.createElement('meta');
+		sbNode.name = 'apple-itunes-app';
+		sbNode.content = 'app-id=6448101409, app-argument=woos://woosmap.com?key='+ key;
+		headNode.appendChild(sbNode);
+                window.location = "woos://woosmap.com?key=" + key;	
         }
 
         function doRedirect(){
