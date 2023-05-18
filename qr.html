@@ -5,8 +5,9 @@
 </head>
 <body>
 <Form>
-<input name='publickey' type=text placeholder="public key"/><br/>
-<input name='naokey' type=text placeholder="NAO key"/><br/><br/>
+Woosmap <input name='publickey' type=text placeholder="public key" size="100"/><br/><br/>
+<input name="nonao" type="checkbox" onclick='handleClick(this);'/> I have Polestar key. 
+<input name='naokey' type=text placeholder="NAO key" disabled="true" size="89"/><br/><br/>
 <input type=button value= "Generate QR" onclick="generate()" />
 </Form>
 <p class=result>- No result -</p>
@@ -28,6 +29,17 @@ Woosmap
    </p>
 </p>
 <script>
+function handleClick(cb){
+   var naokey = document.querySelector('input[name="naokey"]');
+   naokey.value = '';
+   if(cb.checked){
+      naokey.disabled = false;
+      naokey.focus();
+   }
+   else{
+      naokey.disabled = true;
+   }
+}
 function generate(){
 var pkey = document.querySelector('input[name="publickey"]');
 var naokey = document.querySelector('input[name="naokey"]');
