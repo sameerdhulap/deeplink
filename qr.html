@@ -8,6 +8,8 @@
 Woosmap <input name='publickey' type=text placeholder="public key" size="100"/><br/><br/>
 <input name="nonao" type="checkbox" onclick='handleClick(this);'/> I have Polestar key. 
 <input name='naokey' type=text placeholder="NAO key" disabled="true" size="89"/><br/><br/>
+<input name="noia" type="checkbox" onclick='handleClickIA(this);'/> I have IndoorAtlas key.
+<input name='iakey' type=text placeholder="IA key" disabled="true" size="30"/> Secret: <input name='iasecret' type=text placeholder="IA Secret" disabled="true" size="45"/><br/><br/>
 <input type=button value= "Generate QR" onclick="generate()" />
 </Form>
 <p class=result>- No result -</p>
@@ -31,19 +33,59 @@ Woosmap
 <script>
 function handleClick(cb){
    var naokey = document.querySelector('input[name="naokey"]');
+   var iakey = document.querySelector('input[name="iakey"]');
+   var iasecret = document.querySelector('input[name="iasecret"]');
+   var noia = document.querySelector('input[name="noia"]');
    naokey.value = '';
    if(cb.checked){
       naokey.disabled = false;
       naokey.focus();
+      iakey.value = '';
+      iasecret.value = '';
+      iakey.disabled = true;
+      iasecret.disabled = true;
+      noia.checked = false;
+
    }
    else{
       naokey.disabled = true;
    }
 }
+function handleClickIA(cb){
+   var naokey = document.querySelector('input[name="naokey"]');
+   var iakey = document.querySelector('input[name="iakey"]');
+   var iasecret = document.querySelector('input[name="iasecret"]');
+   var nonao = document.querySelector('input[name="nonao"]');
+   iakey.value = '';
+   iasecret.value = '';
+   if(cb.checked){
+      iakey.disabled = false;
+      iasecret.disabled = false;
+      iakey.focus();
+      naokey.value = '';
+      naokey.disabled = true;
+      nonao.checked = false;
+   }
+   else{
+      iakey.disabled = true;
+      iasecret.disabled = true;
+   }
+}
 function generate(){
 var pkey = document.querySelector('input[name="publickey"]');
 var naokey = document.querySelector('input[name="naokey"]');
-const jsonstruct = {woosmap_key:pkey.value,polestar_key:naokey.value};
+var nonao = document.querySelector('input[name="nonao"]');
+var iakey = document.querySelector('input[name="iakey"]');
+var iasecret = document.querySelector('input[name="iasecret"]');
+var noia = document.querySelector('input[name="noia"]')
+
+var jsonstruct = {woosmap_key:pkey.value};
+if(nonao.checked){
+   jsonstruct.polestar_key = naokey.value
+}
+if(noia.checked){
+   jsonstruct.ia_key = iakey.value + ":" + iasecret.value;
+}
 var key = "woos://woosmap.com?key="+ btoa(JSON.stringify(jsonstruct));
 
 document.querySelector('.result').innerText = key
