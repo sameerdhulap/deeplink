@@ -10,6 +10,7 @@ Woosmap <input name='publickey' type=text placeholder="public key" size="100"/><
 <input name='naokey' type=text placeholder="NAO key" disabled="true" size="89"/><br/><br/>
 <input name="noia" type="checkbox" onclick='handleClickIA(this);'/> I have IndoorAtlas key.
 <input name='iakey' type=text placeholder="IA key" disabled="true" size="30"/> Secret: <input name='iasecret' type=text placeholder="IA Secret" disabled="true" size="45"/><br/><br/>
+<input name="devstack" type="checkbox"/> Use Develop stack.(internal purpose only)<br/><br/>
 <input type=button value= "Generate QR" onclick="generate()" />
 </Form>
 <p class=result>- No result -</p>
@@ -19,8 +20,8 @@ Woosmap <input name='publickey' type=text placeholder="public key" size="100"/><
    <p>
     Dear [name],<br/><br/>
 Thank you for your interest in Woosmap. If you haven't already, you can download the app by clicking on the following links:<br/>
-      - For Android users: <a href="https://play.google.com/store/apps/details?id=com.woosmap.woosmap">https://play.google.com/store/apps/details?id=com.woosmap.woosmap</a><br/>
-- For iOS users: <a  href="https://apple.co/3IIPCJ5">https://apps.apple.com/fr/app/woosmap/id6448101409?itsct=apps_box_link&itscg=30200</a><br/>
+      - For Android users: <a href="#">https://play.google.com/store/apps/details?id=com.woosmap.woosmap</a><br/>
+- For iOS users: <a  href="#">https://apps.apple.com/fr/app/woosmap/id6448101409?itsct=apps_box_link&itscg=30200</a><br/>
 <br/>
 To start using the app, simply download and open it. Then, choose the "Scan QR Code" option and scan the code provided. This will quickly configure the app for you.
 <br/><br/>
@@ -78,6 +79,8 @@ var nonao = document.querySelector('input[name="nonao"]');
 var iakey = document.querySelector('input[name="iakey"]');
 var iasecret = document.querySelector('input[name="iasecret"]');
 var noia = document.querySelector('input[name="noia"]')
+var devstack = document.querySelector('input[name="devstack"]')
+
 
 var jsonstruct = {woosmap_key:pkey.value};
 if(nonao.checked){
@@ -86,6 +89,11 @@ if(nonao.checked){
 if(noia.checked){
    jsonstruct.ia_key = iakey.value + ":" + iasecret.value;
 }
+
+if(devstack.checked){
+   jsonstruct.stack = "dev";
+}
+
 var key = "woos://woosmap.com?key="+ btoa(JSON.stringify(jsonstruct));
 
 document.querySelector('.result').innerText = key
