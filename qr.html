@@ -5,7 +5,8 @@
 </head>
 <body>
 <Form>
-Woosmap <input name='publickey' type=text placeholder="public key" size="50"/> or <input name='privatekey' type=text placeholder="private key" size="50"/><br/><br/>
+Woosmap <input name='publickey' type=text placeholder="public key" size="50"/><br/><br/>
+&emsp;or (<input name='privatekey' type=text placeholder="iOS private key" size="50"/> and <input name='privatekeyandroid' type=text placeholder="Android private key" size="50"/>)<br/><br/>
 <input name="nonao" type="checkbox" onclick='handleClick(this);'/> I have Polestar key. 
 <input name='naokey' type=text placeholder="NAO key" disabled="true" size="89"/><br/><br/>
 <input name="noia" type="checkbox" onclick='handleClickIA(this);'/> I have IndoorAtlas key.
@@ -81,18 +82,21 @@ var iasecret = document.querySelector('input[name="iasecret"]');
 var noia = document.querySelector('input[name="noia"]')
 var devstack = document.querySelector('input[name="devstack"]')
 var privatekey = document.querySelector('input[name="privatekey"]')
+var privatekeyandroid = document.querySelector('input[name="privatekeyandroid"]')
+
 
 
 var jsonstruct = {};
-if(!pkey.value && !privatekey.value){
+if(!pkey.value && !(privatekey.value && privatekeyandroid.value)){
    alert("Invalid input. Please set woosmap key to generate QR");
    return;
 }
 
 if(pkey.value) { jsonstruct.woosmap_key = pkey.value;};
 
-if(privatekey.value) { jsonstruct.woosmap_privatekey = privatekey.value;};
+if(privatekey.value) { jsonstruct.woosmap_privatekey_ios = privatekey.value;};
 
+if(privatekeyandroid.value) { jsonstruct.woosmap_privatekey_android = privatekeyandroid.value;};
 
 if(nonao.checked){
    jsonstruct.polestar_key = naokey.value
