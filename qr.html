@@ -1,120 +1,128 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Woosmap Link generator</title>
+   <title>Woosmap Link generator</title>
 </head>
+
 <body>
-<Form>
-Woosmap <input name='publickey' type=text placeholder="public key" size="50"/><br/><br/>
-&emsp;or (<input name='privatekey' type=text placeholder="iOS private key" size="50"/> and <input name='privatekeyandroid' type=text placeholder="Android private key" size="50"/>)<br/><br/>
-<input name="nonao" type="checkbox" onclick='handleClick(this);'/> I have Polestar key. 
-<input name='naokey' type=text placeholder="NAO key" disabled="true" size="89"/><br/><br/>
-<input name="noia" type="checkbox" onclick='handleClickIA(this);'/> I have IndoorAtlas key.
-<input name='iakey' type=text placeholder="IA key" disabled="true" size="30"/> Secret: <input name='iasecret' type=text placeholder="IA Secret" disabled="true" size="45"/><br/><br/>
-<input name="devstack" type="checkbox"/> Use Develop stack.(internal purpose only)<br/><br/>
-<input type=button value= "Generate QR" onclick="generate()" />
-</Form>
-<p class=result>- No result -</p>
-<p class=qrcode></p>
-<hr/>
-<p><h3>Email Format</h3>
+   <Form>
+      Woosmap <input name='publickey' type=text placeholder="public key" size="50" /><br /><br />
+      &emsp;or (<input name='privatekey' type=text placeholder="iOS private key" size="50" /> and <input
+         name='privatekeyandroid' type=text placeholder="Android private key" size="50" />)<br /><br />
+      <input name="nonao" type="checkbox" onclick='handleClick(this);' /> I have Polestar key.
+      <input name='naokey' type=text placeholder="NAO key" disabled="true" size="89" /><br /><br />
+      <input name="noia" type="checkbox" onclick='handleClickIA(this);' /> I have IndoorAtlas key.
+      <input name='iakey' type=text placeholder="IA key" disabled="true" size="30" /> Secret: <input name='iasecret'
+         type=text placeholder="IA Secret" disabled="true" size="45" /><br /><br />
+      <input name="devstack" type="checkbox" /> Use Develop stack.(internal purpose only)<br /><br />
+      <input type=button value="Generate QR" onclick="generate()" />
+   </Form>
+   <p class=result>- No result -</p>
+   <p class=qrcode></p>
+   <hr />
    <p>
-    Dear [name],<br/><br/>
-Thank you for your interest in Woosmap. If you haven't already, you can download the app by clicking on the following links:<br/>
-      - For Android users: <a href="https://github.com/sameerdhulap/deeplink/commit/b4d99aaa2b06a3247f1da70d28f335694dd44c8c">https://play.google.com/store/apps/details?id=com.woosmap.woosmap</a><br/>
-- For iOS users: <a  href="https://apple.co/3IIPCJ5">https://apps.apple.com/fr/app/woosmap/id6448101409?itsct=apps_box_link&itscg=30200</a><br/>
-<br/>
-To start using the app, simply download and open it. Then, choose the "Scan QR Code" option and scan the code provided. This will quickly configure the app for you.
-<br/><br/>
-Please let me know if you have any questions or need further assistance.
-<br/><br/>
-Best regards,<br/>
-Woosmap
+   <h3>Email Format</h3>
+   <p>
+      Dear [name],<br /><br />
+      Thank you for your interest in Woosmap. If you haven't already, you can download the app by clicking on the
+      following links:<br />
+      - For Android users: <a
+         href="https://github.com/sameerdhulap/deeplink/commit/b4d99aaa2b06a3247f1da70d28f335694dd44c8c">https://play.google.com/store/apps/details?id=com.woosmap.woosmap</a><br />
+      - For iOS users: <a
+         href="https://apple.co/3IIPCJ5">https://apps.apple.com/fr/app/woosmap/id6448101409?itsct=apps_box_link&itscg=30200</a><br />
+      <br />
+      To start using the app, simply download and open it. Then, choose the "Scan QR Code" option and scan the code
+      provided. This will quickly configure the app for you.
+      <br /><br />
+      Please let me know if you have any questions or need further assistance.
+      <br /><br />
+      Best regards,<br />
+      Woosmap
    </p>
-</p>
-<script>
-function handleClick(cb){
-   var naokey = document.querySelector('input[name="naokey"]');
-   var iakey = document.querySelector('input[name="iakey"]');
-   var iasecret = document.querySelector('input[name="iasecret"]');
-   var noia = document.querySelector('input[name="noia"]');
-   naokey.value = '';
-   if(cb.checked){
-      naokey.disabled = false;
-      naokey.focus();
-      iakey.value = '';
-      iasecret.value = '';
-      iakey.disabled = true;
-      iasecret.disabled = true;
-      noia.checked = false;
+   </p>
+   <script>
+      function handleClick(cb) {
+         var naokey = document.querySelector('input[name="naokey"]');
+         var iakey = document.querySelector('input[name="iakey"]');
+         var iasecret = document.querySelector('input[name="iasecret"]');
+         var noia = document.querySelector('input[name="noia"]');
+         naokey.value = '';
+         if (cb.checked) {
+            naokey.disabled = false;
+            naokey.focus();
+            iakey.value = '';
+            iasecret.value = '';
+            iakey.disabled = true;
+            iasecret.disabled = true;
+            noia.checked = false;
 
-   }
-   else{
-      naokey.disabled = true;
-   }
-}
-function handleClickIA(cb){
-   var naokey = document.querySelector('input[name="naokey"]');
-   var iakey = document.querySelector('input[name="iakey"]');
-   var iasecret = document.querySelector('input[name="iasecret"]');
-   var nonao = document.querySelector('input[name="nonao"]');
-   iakey.value = '';
-   iasecret.value = '';
-   if(cb.checked){
-      iakey.disabled = false;
-      iasecret.disabled = false;
-      iakey.focus();
-      naokey.value = '';
-      naokey.disabled = true;
-      nonao.checked = false;
-   }
-   else{
-      iakey.disabled = true;
-      iasecret.disabled = true;
-   }
-}
-function generate(){
-var pkey = document.querySelector('input[name="publickey"]');
-var naokey = document.querySelector('input[name="naokey"]');
-var nonao = document.querySelector('input[name="nonao"]');
-var iakey = document.querySelector('input[name="iakey"]');
-var iasecret = document.querySelector('input[name="iasecret"]');
-var noia = document.querySelector('input[name="noia"]')
-var devstack = document.querySelector('input[name="devstack"]')
-var privatekey = document.querySelector('input[name="privatekey"]')
-var privatekeyandroid = document.querySelector('input[name="privatekeyandroid"]')
+         }
+         else {
+            naokey.disabled = true;
+         }
+      }
+      function handleClickIA(cb) {
+         var naokey = document.querySelector('input[name="naokey"]');
+         var iakey = document.querySelector('input[name="iakey"]');
+         var iasecret = document.querySelector('input[name="iasecret"]');
+         var nonao = document.querySelector('input[name="nonao"]');
+         iakey.value = '';
+         iasecret.value = '';
+         if (cb.checked) {
+            iakey.disabled = false;
+            iasecret.disabled = false;
+            iakey.focus();
+            naokey.value = '';
+            naokey.disabled = true;
+            nonao.checked = false;
+         }
+         else {
+            iakey.disabled = true;
+            iasecret.disabled = true;
+         }
+      }
+      function generate() {
+         var pkey = document.querySelector('input[name="publickey"]');
+         var naokey = document.querySelector('input[name="naokey"]');
+         var nonao = document.querySelector('input[name="nonao"]');
+         var iakey = document.querySelector('input[name="iakey"]');
+         var iasecret = document.querySelector('input[name="iasecret"]');
+         var noia = document.querySelector('input[name="noia"]')
+         var devstack = document.querySelector('input[name="devstack"]')
+         var privatekey = document.querySelector('input[name="privatekey"]')
+         var privatekeyandroid = document.querySelector('input[name="privatekeyandroid"]')
+         var jsonstruct = {};
+         if (pkey.value || (privatekey.value || privatekeyandroid.value)) {
+            if (pkey.value) { jsonstruct.woosmap_key = pkey.value; };
 
+            if (privatekey.value) { jsonstruct.woosmap_privatekey_ios = privatekey.value; };
 
+            if (privatekeyandroid.value) { jsonstruct.woosmap_privatekey_android = privatekeyandroid.value; };
 
-var jsonstruct = {};
-if(!pkey.value && !(privatekey.value && privatekeyandroid.value)){
-   alert("Invalid input. Please set woosmap key to generate QR");
-   return;
-}
+            if (nonao.checked) {
+               jsonstruct.polestar_key = naokey.value
+            }
+            if (noia.checked) {
+               jsonstruct.ia_key = iakey.value + ":" + iasecret.value;
+            }
 
-if(pkey.value) { jsonstruct.woosmap_key = pkey.value;};
+            if (devstack.checked) {
+               jsonstruct.stack = "dev";
+            }
 
-if(privatekey.value) { jsonstruct.woosmap_privatekey_ios = privatekey.value;};
+            var key = "woos://woosmap.com?key=" + btoa(JSON.stringify(jsonstruct));
 
-if(privatekeyandroid.value) { jsonstruct.woosmap_privatekey_android = privatekeyandroid.value;};
-
-if(nonao.checked){
-   jsonstruct.polestar_key = naokey.value
-}
-if(noia.checked){
-   jsonstruct.ia_key = iakey.value + ":" + iasecret.value;
-}
-
-if(devstack.checked){
-   jsonstruct.stack = "dev";
-}
-
-var key = "woos://woosmap.com?key="+ btoa(JSON.stringify(jsonstruct));
-
-document.querySelector('.result').innerText = key
-document.querySelector('.qrcode').innerHTML = '<img src="https://qrickit.com/api/qr.php?d='+key+'&addtext=woosmap&txtcolor=442EFF&fgdcolor=000000&bgdcolor=FFFFFF&qrsize=300&t=p&e=m"/>'
-}
-</script>
+            document.querySelector('.result').innerText = key
+            document.querySelector('.qrcode').innerHTML = '<img src="https://qrickit.com/api/qr.php?d=' + key + '&addtext=woosmap&txtcolor=442EFF&fgdcolor=000000&bgdcolor=FFFFFF&qrsize=300&t=p&e=m"/>'
+         }
+         else {
+            alert("Invalid input. Please set woosmap key to generate QR");
+            return;
+         }
+      }
+   </script>
 
 </body>
+
 </html>
